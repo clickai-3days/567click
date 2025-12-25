@@ -27,6 +27,7 @@ import {
 // --- CONFIGURATION ---
 const LOGO_URL = "https://static.vncdn.vn/vnetwork.vn/pub/websites/uploads/5/new%20logo%20click%20ai%20(1).png";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvrhkOOA1dSzB_Ys4KQknAR6E6wjMz6lSDzev6tpZTlgB3BUmlvndbmmC9dwZUzREvRA/exec";
+const ZALO_GROUP_URL = "https://zalo.me/g/axaqfu195";
 
 const CURRICULUM = [
   {
@@ -169,7 +170,6 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
       setSuccess(true);
     } catch (err) {
       console.error("Lỗi đăng ký:", err);
-      // Fallback to success for user experience if redirect is the main goal
       setSuccess(true);
     } finally {
       setLoading(false);
@@ -194,7 +194,7 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
               <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 <div className="text-center space-y-3">
                   <h2 className="text-3xl font-extrabold tracking-tight text-apple-black">Giữ chỗ ngay</h2>
-                  <p className="text-apple-blue text-sm font-bold uppercase tracking-wider">Ưu đãi miễn phí có hạn</p>
+                  <p className="text-apple-blue text-sm font-bold uppercase tracking-wider italic">Ưu đãi miễn phí có hạn</p>
                 </div>
                 <div className="space-y-4">
                   {[
@@ -217,7 +217,10 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
                 </div>
                 <div className="pt-2">
                   <AppleButton text="Hoàn tất đăng ký" fullWidth loading={loading} />
-                  <p className="text-[11px] text-center text-apple-dark-gray mt-6 flex items-center justify-center gap-1.5 font-semibold uppercase tracking-widest">
+                  <p className="text-[13px] text-center text-apple-black mt-6 font-bold leading-tight px-2">
+                    * Lưu ý: Sau khi đăng ký thành công, bạn sẽ được mời vào Nhóm Zalo Kín để nhận link Zoom và các tài liệu quan trọng của Workshop.
+                  </p>
+                  <p className="text-[11px] text-center text-apple-dark-gray mt-4 flex items-center justify-center gap-1.5 font-semibold uppercase tracking-widest opacity-50">
                     <ShieldCheck size={14} className="text-green-500" /> Secure Connection
                   </p>
                 </div>
@@ -230,12 +233,12 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
                 <div className="space-y-3">
                   <h3 className="text-3xl font-extrabold text-apple-black">Thành công!</h3>
                   <p className="text-apple-dark-gray font-medium text-lg text-center leading-tight">
-                    Thông tin của bạn đã được ghi nhận. <br/>Vui lòng tham gia nhóm để lấy link Zoom.
+                    Thông tin của bạn đã được ghi nhận. <br/>Vui lòng tham gia nhóm ngay để nhận link Zoom và tài liệu.
                   </p>
                 </div>
                 <div className="w-full space-y-4">
-                  <a href="https://zalo.me/g/clickai" target="_blank" className="flex items-center justify-center w-full bg-[#007AFF] text-white h-16 rounded-2xl font-bold text-lg hover:bg-[#0071E3] transition-all shadow-xl shadow-blue-500/20">
-                    <MessageCircle className="mr-3" size={24} /> Tham gia Group Zalo
+                  <a href={ZALO_GROUP_URL} target="_blank" className="flex items-center justify-center w-full bg-[#007AFF] text-white h-16 rounded-2xl font-bold text-lg hover:bg-[#0071E3] transition-all shadow-xl shadow-blue-500/20">
+                    <MessageCircle className="mr-3" size={24} /> Tham gia Group Zalo Ngay
                   </a>
                 </div>
               </div>
@@ -256,7 +259,6 @@ const App = () => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll, { passive: true });
     
-    // Parse UTM tags
     const params = new URLSearchParams(window.location.search);
     const tags = [];
     if (params.get('utm_source')) tags.push(`src:${params.get('utm_source')}`);
@@ -282,7 +284,6 @@ const App = () => {
     <div className="min-h-screen bg-white">
       <RegistrationModal isOpen={modalOpen} onClose={() => setModalOpen(false)} utm={utm} />
 
-      {/* Sticky Top Bar */}
       <div className="bg-[#1D1D1F] text-[#F5F5F7] text-center py-3 px-4 text-[13px] font-bold flex items-center justify-center gap-3 fixed top-0 w-full z-[110] border-b border-white/5">
         <span className="bg-apple-blue text-white text-[10px] px-2 py-0.5 rounded-full animate-pulse">LIVE</span>
         Workshop giới hạn 97 người. Ưu đãi hết hạn sau khi đủ số lượng.
@@ -311,7 +312,6 @@ const App = () => {
         </nav>
       </header>
 
-      {/* Hero Section */}
       <section className="hero-gradient pt-56 md:pt-72 pb-24 md:pb-40 px-6">
         <div className="max-w-[1100px] mx-auto text-center space-y-10">
           <motion.div
@@ -339,12 +339,11 @@ const App = () => {
             className="max-w-3xl mx-auto space-y-12"
           >
             <p className="text-xl md:text-3xl text-apple-dark-gray font-semibold leading-tight tracking-tight">
-              Cài đặt một <span className="text-apple-black">AI Infrastructure</span> để vận hành doanh nghiệp thay bạn 24/7. Giải phóng 80% thời gian.
+              Cài đặt một <span className="text-apple-black">hệ thống AI Workspace</span> để vận hành doanh nghiệp thay bạn 24/7. Giải phóng 80% thời gian.
             </p>
             <div className="flex flex-col items-center gap-8 pt-4">
               <AppleButton 
                 text="Giữ chỗ miễn phí ngay" 
-                subtext="Nhận ngay bộ prompt quà tặng"
                 className="px-16 py-6 text-2xl shadow-2xl" 
                 onClick={() => setModalOpen(true)} 
               />
@@ -358,7 +357,6 @@ const App = () => {
         </div>
       </section>
 
-      {/* The Gap (Alex Hormozi Strategy) */}
       <section id="gap" className="section-padding px-6 bg-white border-t border-apple-gray">
         <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-20 space-y-6">
@@ -374,7 +372,7 @@ const App = () => {
               <div className="flex items-center gap-5 mb-12">
                 <div className="w-16 h-16 rounded-2xl bg-red-100 flex items-center justify-center text-red-600 font-black text-2xl">X</div>
                 <div>
-                  <h3 className="text-3xl font-black text-apple-black leading-none">THỰC TRẠNG</h3>
+                  <h3 className="text-3xl font-black text-apple-black leading-none uppercase">THỰC TRẠNG</h3>
                   <p className="text-red-500 text-sm font-bold mt-1 uppercase tracking-widest italic">The Burnout Cycle</p>
                 </div>
               </div>
@@ -407,7 +405,6 @@ const App = () => {
         </div>
       </section>
 
-      {/* Curriculum Section */}
       <section id="curriculum" className="section-padding px-6 bg-apple-gray">
         <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-24 space-y-4">
@@ -449,7 +446,6 @@ const App = () => {
         </div>
       </section>
 
-      {/* Speakers */}
       <section id="speakers" className="section-padding px-6 bg-white">
         <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-24 space-y-6">
@@ -494,7 +490,6 @@ const App = () => {
         </div>
       </section>
 
-      {/* Value Stack */}
       <section id="valuestack" className="section-padding px-6 bg-white border-t border-apple-gray">
         <div className="max-w-[1000px] mx-auto">
           <div className="bg-[#1D1D1F] rounded-[60px] text-white p-10 md:p-24 shadow-2xl relative overflow-hidden border border-white/5">
@@ -532,12 +527,12 @@ const App = () => {
                 <div className="space-y-4 bg-white/5 p-12 rounded-[40px] border border-white/10">
                   <p className="text-apple-blue font-black uppercase tracking-[0.3em] text-lg">GIÁ TRỰC TIẾP HÔM NAY</p>
                   <h3 className="text-[100px] md:text-[180px] font-black leading-none tracking-tighter drop-shadow-2xl">FREE</h3>
-                  <p className="text-apple-dark-gray font-bold italic">Dành cho 97 người hành động nhanh nhất</p>
+                  <p className="text-apple-dark-gray font-bold italic uppercase tracking-widest">Dành cho 97 người hành động nhanh nhất</p>
                 </div>
 
                 <div className="pt-10 space-y-10">
                   <AppleButton 
-                    text="Đăng ký giữ chỗ ngay" 
+                    text="Giữ chỗ miễn phí ngay" 
                     fullWidth 
                     className="py-10 text-3xl shadow-blue-500/40" 
                     onClick={() => setModalOpen(true)} 
@@ -554,7 +549,6 @@ const App = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="py-24 px-6 border-t border-apple-gray bg-apple-gray">
         <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-16">
           <div className="space-y-6 text-center md:text-left">
@@ -575,7 +569,6 @@ const App = () => {
   );
 };
 
-// --- RENDER ---
 const rootElement = document.getElementById('root');
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
