@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Click AI | Workshop Solopreneur</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
@@ -21,21 +23,23 @@
             },
             fontFamily: {
               sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-            },
-            borderRadius: {
-              'apple': '20px'
             }
           }
         }
       }
     </script>
     <style>
+      /* Base styles to prevent "white screen" and ensure readability */
       body {
         background-color: #ffffff;
         color: #1d1d1f;
         font-family: 'Inter', sans-serif;
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+        opacity: 1 !important; /* Ensure body is always visible */
+        display: block !important;
       }
 
       .glass {
@@ -94,6 +98,21 @@
       section[id] {
         scroll-margin-top: 120px;
       }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d2d2d7;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #86868b;
+      }
     </style>
     <script type="importmap">
 {
@@ -110,6 +129,16 @@
 </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Fallback content for SEO and No-JS -->
+    <div id="root">
+      <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif;">
+        <div style="text-align: center;">
+          <h1 style="font-size: 24px; font-weight: 700;">Click AI Workshop</h1>
+          <p style="color: #86868b;">Đang tải trải nghiệm của bạn...</p>
+        </div>
+      </div>
+    </div>
+    <!-- The index.tsx will be automatically loaded as an ES module -->
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>

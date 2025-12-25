@@ -1,20 +1,28 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Click AI | Workshop Solopreneur Landing Page
 
-# Run and deploy your AI Studio app
+Thiết kế Landing Page chuyên nghiệp theo phong cách Apple UI dành cho Workshop "AI Infrastructure for Solopreneur".
 
-This contains everything you need to run your app locally.
+## Cấu trúc thư mục (Minimal Repository)
+- `/index.html`: File HTML duy nhất chứa toàn bộ cấu trúc và style (CSS-in-HTML).
+- `/index.tsx`: Toàn bộ logic ứng dụng React, UI Components và Content (No Build Step needed).
+- `/README.md`: Hướng dẫn vận hành.
+- `/metadata.json`: Thông tin dự án.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1WDONnL42N7UHpOIxmgbuFszd9ljKajj1
+## Hướng dẫn Deploy Vercel (Ổn định nhất)
+1. Truy cập [Vercel](https://vercel.com).
+2. Chọn **Add New** → **Project**.
+3. Import Repo từ GitHub.
+4. Tại phần **Project Settings**:
+   - **Framework Preset**: Chọn `Other` (hoặc No Build).
+   - **Build and Output Settings**: Giữ nguyên mặc định.
+5. Click **Deploy**.
 
-## Run Locally
+## Tính năng kỹ thuật
+- **Zero Build Step**: Chạy trực tiếp qua ESM modules.
+- **Responsive Design**: Tối ưu hoàn toàn cho Mobile và Desktop.
+- **Apple Style**: Typography Inter, soft shadows, glassmorphism.
+- **Performance**: Không dùng bundle nặng, load script via CDN (esm.sh).
+- **Security**: Không sử dụng environment variables phía client, dữ liệu form gửi qua URL webhook an toàn.
 
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+---
+© 2025 Click AI Architecture.
