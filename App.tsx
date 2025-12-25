@@ -7,7 +7,6 @@ import {
   ShieldCheck,
   Clock,
   Zap,
-  AlertCircle,
   Gift,
   MousePointer2,
   CalendarDays,
