@@ -314,22 +314,22 @@ const App = () => {
         </nav>
       </header>
 
-      {/* Hero Section - Optimized Mobile Layout */}
-      <section className="hero-gradient pt-52 sm:pt-60 md:pt-72 pb-20 md:pb-40 px-6">
+      {/* Hero Section - Balanced Padding & Sizing */}
+      <section className="hero-gradient pt-40 sm:pt-48 md:pt-52 pb-20 md:pb-32 px-6">
         <div className="max-w-[1100px] mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 bg-apple-blue/10 text-apple-blue px-4 py-2 rounded-full text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-widest mb-6 sm:mb-8"
+            className="inline-flex items-center gap-2 bg-apple-blue/10 text-apple-blue px-4 py-2 rounded-full text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-widest mb-4 sm:mb-6"
           >
-            <Target size={14} /> The AI Solopreneur Workshop 2025
+            <Target size={14} /> The AI Solopreneur Workshop 2026
           </motion.div>
           
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.8 }}
-            className="text-[34px] sm:text-6xl md:text-[96px] font-black tracking-tighter text-apple-black leading-[1.1] md:leading-[0.95] uppercase mb-8 sm:mb-10"
+            className="text-[32px] sm:text-5xl md:text-[88px] font-black tracking-tighter text-apple-black leading-[1.1] md:leading-[0.95] uppercase mb-6 sm:mb-8 px-2"
           >
             Đừng chỉ dùng AI.<br/>
             <span className="text-apple-dark-gray/40">Hãy xây hệ thống.</span>
@@ -339,30 +339,29 @@ const App = () => {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             transition={{ delay: 0.4 }} 
-            className="max-w-3xl mx-auto space-y-10 sm:space-y-12"
+            className="max-w-3xl mx-auto space-y-6 sm:space-y-8"
           >
-            <p className="text-base sm:text-xl md:text-3xl text-apple-dark-gray font-semibold leading-relaxed sm:leading-tight tracking-tight px-4 sm:px-0">
+            <p className="text-sm sm:text-lg md:text-2xl text-apple-dark-gray font-semibold leading-relaxed sm:leading-tight tracking-tight px-4 sm:px-0">
               Cài đặt một <span className="text-apple-black">hệ thống AI Workspace</span> để vận hành doanh nghiệp thay bạn 24/7. Giải phóng 80% thời gian.
             </p>
             
-            <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-col items-center gap-6 sm:gap-8">
               <AppleButton 
                 text="Giữ chỗ miễn phí ngay" 
-                className="w-full sm:w-auto px-10 sm:px-16 py-5 sm:py-6 text-xl sm:text-2xl shadow-2xl" 
+                className="w-full sm:w-auto px-10 sm:px-16 py-4 sm:py-6 text-lg sm:text-2xl shadow-2xl" 
                 onClick={() => setModalOpen(true)} 
               />
               
-              <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-10 gap-y-4 text-apple-dark-gray text-[11px] sm:text-sm md:text-base font-bold uppercase tracking-widest">
-                <span className="flex items-center gap-2"><Clock size={18} className="text-apple-blue" /> 19:30 – 21:00</span>
-                <span className="flex items-center gap-2"><CalendarDays size={18} className="text-apple-blue" /> 05/01 – 07/01</span>
-                <span className="flex items-center gap-2"><Users size={18} className="text-apple-blue" /> Zoom Online</span>
+              <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-10 gap-y-3 text-apple-dark-gray text-[10px] sm:text-sm md:text-base font-bold uppercase tracking-widest">
+                <span className="flex items-center gap-2"><Clock size={16} className="text-apple-blue" /> 19:30 – 21:00</span>
+                <span className="flex items-center gap-2"><CalendarDays size={16} className="text-apple-blue" /> 05/01 – 07/01</span>
+                <span className="flex items-center gap-2"><Users size={16} className="text-apple-blue" /> Zoom Online</span>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Rest of the sections remain identical to satisfy user preference for minimal updates */}
       {/* The Gap */}
       <section id="gap" className="section-padding px-6 bg-white border-t border-apple-gray">
         <div className="max-w-[1200px] mx-auto">
@@ -565,7 +564,7 @@ const App = () => {
           <div className="space-y-6">
             <img src={LOGO_URL} alt="Logo" className="h-7 grayscale opacity-40 mx-auto md:mx-0 hover:opacity-100 transition-opacity" />
             <p className="text-apple-dark-gray text-[10px] md:text-sm font-bold leading-relaxed tracking-tight uppercase">
-              Copyright &copy; 2025 Click AI Architecture.<br/>
+              Copyright &copy; 2026 Click AI Architecture.<br/>
               Hệ thống AI cho thế hệ Solopreneur.
             </p>
           </div>
