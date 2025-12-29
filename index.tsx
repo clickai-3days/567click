@@ -58,7 +58,7 @@ const CURRICULUM = [
     value: "10.000.000đ",
     icon: <Users size={24} />,
     modules: [
-      { name: "AI Training - Quy trình Trainer 4.0", desc: "Scale mô hình đào tạo lên hàng ngàn người với chi phí tối thiểu." },
+      { name: "AI Training - Quy trình Trainer 4.0", desc: "Scale mô hình đào tạo lên hàng ngàn người with chi phí tối thiểu." },
       { name: "Sức mạnh xây dựng cộng đồng", desc: "Tại sao Community là tài sản quý giá nhất trong kỷ nguyên AI." },
       { name: "MVP 90-Day Roadmap", desc: "Hành động beat sự hoàn hảo. Quy trình bắt đầu ngay hôm nay." }
     ]
@@ -159,6 +159,7 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.name || !formData.email || !formData.phone) return;
     setLoading(true);
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
@@ -203,7 +204,9 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
                     { key: 'email', label: "Email nhận tài liệu", type: "email", placeholder: "abc@gmail.com" }
                   ].map((field) => (
                     <div key={field.key} className="space-y-1.5">
-                      <label className="text-[12px] font-bold text-apple-dark-gray ml-2 uppercase tracking-wide">{field.label}</label>
+                      <label className="text-[12px] font-bold text-apple-dark-gray ml-2 uppercase tracking-wide">
+                        {field.label} <span className="text-red-500 font-bold">*</span>
+                      </label>
                       <input 
                         required 
                         type={field.type}
@@ -314,7 +317,7 @@ const App = () => {
         </nav>
       </header>
 
-      {/* Hero Section - Balanced Padding & Sizing */}
+      {/* Hero Section */}
       <section className="hero-gradient pt-40 sm:pt-48 md:pt-52 pb-20 md:pb-32 px-6">
         <div className="max-w-[1100px] mx-auto text-center">
           <motion.div
