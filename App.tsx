@@ -25,7 +25,7 @@ import {
 
 // --- CONFIGURATION ---
 const LOGO_URL = "https://static.vncdn.vn/vnetwork.vn/pub/websites/uploads/5/new%20logo%20click%20ai%20(1).png";
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvrhkOOA1dSzB_Ys4KQknAR6E6wjMz6lSDzev6tpZTlgB3BUmlvndbmmC9dwZUzREvRA/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXddF8lx9CWXYGiul6y7KCeD-BvqgRFakpj1Xt3LJUv29YNsc1ywzN7RrCGjixTWxbXQ/exec";
 
 const CURRICULUM = [
   {
