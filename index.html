@@ -18,10 +18,8 @@
     fbq('track', 'PageView');
     </script>
     <!-- End Meta Pixel Code -->
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -43,17 +41,12 @@
       }
     </script>
     <style>
-      /* Base styles to prevent "white screen" and ensure readability */
       body {
         background-color: #ffffff;
         color: #1d1d1f;
         font-family: 'Inter', sans-serif;
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
-        margin: 0;
-        padding: 0;
-        opacity: 1 !important; /* Ensure body is always visible */
-        display: block !important;
       }
 
       .glass {
@@ -64,12 +57,13 @@
 
       .apple-card {
         background: #f5f5f7;
-        border-radius: 24px;
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 32px;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
       
       .apple-card:hover {
-        transform: scale(1.01);
+        transform: scale(1.015);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.05);
       }
 
       .strikethrough-apple {
@@ -83,10 +77,11 @@
         left: 0;
         top: 50%;
         width: 100%;
-        height: 2px;
+        height: 6px;
         background: #ff3b30;
-        transform: rotate(-5deg);
-        opacity: 0.8;
+        transform: rotate(-3deg);
+        opacity: 0.9;
+        border-radius: 10px;
       }
 
       .hero-gradient {
@@ -94,28 +89,27 @@
       }
 
       h1, h2, h3 {
-        letter-spacing: -0.02em;
+        letter-spacing: -0.05em;
       }
       
       .section-padding {
-        padding-top: 100px;
-        padding-bottom: 100px;
+        padding-top: 120px;
+        padding-bottom: 120px;
       }
 
       @media (max-width: 768px) {
         .section-padding {
-          padding-top: 60px;
-          padding-bottom: 60px;
+          padding-top: 80px;
+          padding-bottom: 80px;
         }
       }
       
       section[id] {
-        scroll-margin-top: 120px;
+        scroll-margin-top: 140px;
       }
 
-      /* Scrollbar styling */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 10px;
       }
       ::-webkit-scrollbar-track {
         background: #f1f1f1;
@@ -126,6 +120,11 @@
       }
       ::-webkit-scrollbar-thumb:hover {
         background: #86868b;
+      }
+
+      /* Hiệu ứng gạch chân đỏ kiểu Hormozi */
+      .hormozi-underline {
+        box-shadow: inset 0 -15px 0 0 rgba(0, 122, 255, 0.1);
       }
     </style>
     <script type="importmap">
@@ -146,16 +145,7 @@
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1372412783947096&ev=PageView&noscript=1"
     /></noscript>
-    <!-- Fallback content for SEO and No-JS -->
-    <div id="root">
-      <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif;">
-        <div style="text-align: center;">
-          <h1 style="font-size: 24px; font-weight: 700;">Click AI Workshop</h1>
-          <p style="color: #86868b;">Đang tải trải nghiệm của bạn...</p>
-        </div>
-      </div>
-    </div>
-    <!-- The index.tsx will be automatically loaded as an ES module -->
+    <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
   </body>
 </html>
