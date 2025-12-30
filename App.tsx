@@ -26,7 +26,7 @@ import {
 
 // --- CONFIGURATION ---
 const LOGO_URL = "https://static.vncdn.vn/vnetwork.vn/pub/websites/uploads/5/new%20logo%20click%20ai%20(1).png";
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0tcj2jKOA1fEH9yc_EO7JwNT00emdEZppnVoCRI3eudd_rqn-J6zGNX46i-QjMv5sfw/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2CEnH-BEpj4GeEz0Kwi2Qu3m1Xmk74Ix6VCJEaPej2L0LwE6wdqdeturLrn3IpIFvjA/exec";
 const ZALO_GROUP_URL = "https://zalo.me/g/axaqfu195";
 
 const CURRICULUM = [
@@ -122,7 +122,7 @@ const AppleButton = ({ text, onClick, variant = 'primary', className = '', fullW
     <button
       onClick={onClick}
       disabled={loading}
-      className={`${base} ${styles[variant as keyof typeof styles]} ${fullWidth ? 'w-full px-4' : 'px-6 md:px-8'} py-3.5 md:py-4 ${className} disabled:opacity-70`}
+      className={`${base} ${styles[variant as keyof typeof styles]} ${fullWidth ? 'w-full px-4' : 'px-6 md:px-8'} py-3.5 md:py-4 ${className} disabled:opacity-70 disabled:cursor-not-allowed`}
     >
       {loading ? <Loader2 className="animate-spin" size={20} /> : (
         <>
@@ -137,48 +137,69 @@ const AppleButton = ({ text, onClick, variant = 'primary', className = '', fullW
 const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose: () => void; utm: string }) => {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+  
+  // QUAN TRỌNG: Không sử dụng state để lưu form data nữa.
+  // Lý do: State React có thể bị trễ so với thao tác gõ phím nhanh hoặc Autofill, gây mất dữ liệu.
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (loading) return;
     
-    // 1. Chặn Double Submit
-    if (loading) return; 
+    // 1. LẤY DỮ LIỆU "TƯƠI" TRỰC TIẾP TỪ HTML DOM
+    // Đảm bảo lấy đúng những gì đang hiện trên màn hình, không thông qua React State.
+    const form = e.currentTarget;
+    const formDataObj = new FormData(form);
     
-    // 2. Validate cơ bản
-    if (!formData.email || !formData.phone) return;
-    
+    const rawName = formDataObj.get('name') as string || '';
+    const rawEmail = formDataObj.get('email') as string || '';
+    const rawPhone = formDataObj.get('phone') as string || '';
+
+    // Validate đơn giản
+    if (!rawEmail.trim() || !rawPhone.trim()) {
+        alert("Vui lòng điền đầy đủ thông tin.");
+        return;
+    }
+
+    // 2. KHÓA FORM (LOCK)
+    // Khi set loading = true, các input bên dưới sẽ bị readOnly.
+    // Vì không dùng value={state}, dữ liệu trong input sẽ KHÔNG bị reset/biến mất.
     setLoading(true);
     
-    // 3. Chuẩn hóa dữ liệu
+    // 3. CHUẨN BỊ DỮ LIỆU GỬI ĐI (Mapping với Google Sheet)
+    // Dùng URLSearchParams (x-www-form-urlencoded) để tương thích chuẩn nhất với Google Script
     const submitData = new URLSearchParams();
-    submitData.append('name', formData.name.trim());
-    submitData.append('email', formData.email.trim().toLowerCase());
-    submitData.append('phone', formData.phone.trim());
-    submitData.append('utm', utm || "Direct");
+    submitData.append('name', rawName.trim());  // Cột A
+    submitData.append('email', rawEmail.trim().toLowerCase()); // Cột B
+    submitData.append('phone', rawPhone.trim()); // Cột C
+    submitData.append('utm', utm || "Direct");   // Cột D (Ref Code)
+    
+    // LƯU Ý QUAN TRỌNG: 
+    // KHÔNG gửi 'time' từ Client nữa. Việc gửi time từ Client đã gây ra lỗi lệch cột (Time nhảy vào cột A).
+    // Google Script sẽ tự động điền thời gian vào cột cuối cùng (Cột E) như các dòng dữ liệu cũ đã đúng.
 
     try {
-      // 4. Gửi dữ liệu (No-CORS + LockService Backend)
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
         body: submitData.toString()
       });
       
       setSuccess(true);
       
-      // Fire pixel event
       if (typeof window !== 'undefined' && (window as any).fbq) {
         (window as any).fbq('track', 'CompleteRegistration');
       }
 
     } catch (err) {
       console.error("Lỗi gửi form:", err);
-      // Fallback: Vẫn hiện success để user vào nhóm Zalo
+      // Vẫn báo thành công để khách vào nhóm Zalo, tránh kẹt ở màn hình loading
       setSuccess(true);
     } finally {
-      setLoading(false);
+      // Chỉ tắt loading nếu chưa thành công (để retry), còn thành công rồi thì giữ nguyên để hiện UI Success
+      if (!success) setLoading(false); 
     }
   };
 
@@ -195,7 +216,7 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
             <button onClick={onClose} className="absolute top-6 right-6 md:top-8 md:right-8 text-apple-dark-gray hover:text-apple-black transition-colors"><XCircle className="w-7 h-7 md:w-8 md:h-8" /></button>
             
             {!success ? (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-6">
+              <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5 md:gap-6">
                 <div className="text-center space-y-2 md:space-y-3">
                   <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-apple-black uppercase whitespace-nowrap">Giữ chỗ ngay</h2>
                   <p className="text-apple-blue text-xs md:text-sm font-bold uppercase tracking-wider">Số lượng quà tặng có hạn</p>
@@ -209,28 +230,56 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
                 </div>
 
                 <div className="space-y-3 md:space-y-4">
-                  {[
-                    { key: 'name', label: "Họ và tên", type: "text", placeholder: "Ví dụ: Nguyễn Văn A" },
-                    { key: 'phone', label: "Số điện thoại Zalo", type: "tel", placeholder: "Ví dụ: 090xxxxxxx" },
-                    { key: 'email', label: "Email nhận tài liệu", type: "email", placeholder: "Ví dụ: abc@gmail.com" }
-                  ].map((field) => (
-                    <div key={field.key} className="space-y-1 md:space-y-1.5">
-                      <label className="text-[10px] md:text-[11px] font-bold text-apple-dark-gray ml-1 md:ml-2 uppercase tracking-widest flex items-center">
-                        {field.label} <span className="text-apple-blue ml-1">*</span>
-                      </label>
-                      <input 
-                        required 
-                        type={field.type}
-                        placeholder={field.placeholder}
-                        value={(formData as any)[field.key]}
-                        onChange={(e) => setFormData({...formData, [field.key]: e.target.value})}
-                        className="w-full bg-apple-gray rounded-xl md:rounded-2xl py-3.5 md:py-4 px-5 md:px-6 text-apple-black border border-transparent focus:border-apple-blue/30 outline-none focus:ring-4 focus:ring-apple-blue/5 transition-all font-bold text-sm md:text-base" 
-                      />
-                    </div>
-                  ))}
+                  <div className="space-y-1 md:space-y-1.5">
+                    <label className="text-[10px] md:text-[11px] font-bold text-apple-dark-gray ml-1 md:ml-2 uppercase tracking-widest flex items-center">
+                      Họ và tên <span className="text-apple-blue ml-1">*</span>
+                    </label>
+                    {/* INPUT UNCONTROLLED: Không có value={}, không có onChange={}. Trình duyệt tự quản lý. */}
+                    <input 
+                      name="name"
+                      required 
+                      readOnly={loading} 
+                      type="text"
+                      placeholder="Ví dụ: Nguyễn Văn A"
+                      className={`w-full bg-apple-gray rounded-xl md:rounded-2xl py-3.5 md:py-4 px-5 md:px-6 text-apple-black border border-transparent focus:border-apple-blue/30 outline-none focus:ring-4 focus:ring-apple-blue/5 transition-all font-bold text-sm md:text-base ${loading ? 'opacity-80 cursor-not-allowed select-none bg-gray-100' : ''}`}
+                      autoComplete="name"
+                      spellCheck={false}
+                    />
+                  </div>
+
+                  <div className="space-y-1 md:space-y-1.5">
+                    <label className="text-[10px] md:text-[11px] font-bold text-apple-dark-gray ml-1 md:ml-2 uppercase tracking-widest flex items-center">
+                      Số điện thoại Zalo <span className="text-apple-blue ml-1">*</span>
+                    </label>
+                    <input 
+                      name="phone"
+                      required 
+                      readOnly={loading}
+                      type="tel"
+                      placeholder="Ví dụ: 090xxxxxxx"
+                      className={`w-full bg-apple-gray rounded-xl md:rounded-2xl py-3.5 md:py-4 px-5 md:px-6 text-apple-black border border-transparent focus:border-apple-blue/30 outline-none focus:ring-4 focus:ring-apple-blue/5 transition-all font-bold text-sm md:text-base ${loading ? 'opacity-80 cursor-not-allowed select-none bg-gray-100' : ''}`}
+                      autoComplete="tel"
+                    />
+                  </div>
+
+                  <div className="space-y-1 md:space-y-1.5">
+                    <label className="text-[10px] md:text-[11px] font-bold text-apple-dark-gray ml-1 md:ml-2 uppercase tracking-widest flex items-center">
+                      Email nhận tài liệu <span className="text-apple-blue ml-1">*</span>
+                    </label>
+                    <input 
+                      name="email"
+                      required 
+                      readOnly={loading}
+                      type="email"
+                      placeholder="Ví dụ: abc@gmail.com"
+                      className={`w-full bg-apple-gray rounded-xl md:rounded-2xl py-3.5 md:py-4 px-5 md:px-6 text-apple-black border border-transparent focus:border-apple-blue/30 outline-none focus:ring-4 focus:ring-apple-blue/5 transition-all font-bold text-sm md:text-base ${loading ? 'opacity-80 cursor-not-allowed select-none bg-gray-100' : ''}`}
+                      autoComplete="email"
+                      spellCheck={false}
+                    />
+                  </div>
                 </div>
                 <div className="pt-2">
-                  <AppleButton text="Hoàn tất đăng ký ngay" fullWidth loading={loading} className="py-4 md:py-5" />
+                  <AppleButton text={loading ? "Đang xử lý..." : "Hoàn tất đăng ký ngay"} fullWidth loading={loading} className="py-4 md:py-5" />
                   <p className="text-[10px] md:text-[11px] text-center text-apple-dark-gray mt-5 md:mt-6 flex items-center justify-center gap-1.5 font-bold uppercase tracking-widest opacity-60">
                     <ShieldCheck size={14} className="text-green-500" /> Secure Data Encryption
                   </p>
