@@ -26,7 +26,7 @@ import {
 
 // --- CONFIGURATION ---
 const LOGO_URL = "https://static.vncdn.vn/vnetwork.vn/pub/websites/uploads/5/new%20logo%20click%20ai%20(1).png";
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXddF8lx9CWXYGiul6y7KCeD-BvqgRFakpj1Xt3LJUv29YNsc1ywzN7RrCGjixTWxbXQ/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0tcj2jKOA1fEH9yc_EO7JwNT00emdEZppnVoCRI3eudd_rqn-J6zGNX46i-QjMv5sfw/exec";
 const ZALO_GROUP_URL = "https://zalo.me/g/axaqfu195";
 
 const CURRICULUM = [
@@ -141,24 +141,41 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // 1. Chặn Double Submit
+    if (loading) return; 
+    
+    // 2. Validate cơ bản
+    if (!formData.email || !formData.phone) return;
+    
     setLoading(true);
     
-    const body = new URLSearchParams();
-    body.append('name', formData.name.trim());
-    body.append('email', formData.email.trim());
-    body.append('phone', formData.phone.trim());
-    body.append('utm', utm || "Direct");
+    // 3. Chuẩn hóa dữ liệu
+    const submitData = new URLSearchParams();
+    submitData.append('name', formData.name.trim());
+    submitData.append('email', formData.email.trim().toLowerCase());
+    submitData.append('phone', formData.phone.trim());
+    submitData.append('utm', utm || "Direct");
 
     try {
+      // 4. Gửi dữ liệu (No-CORS + LockService Backend)
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString()
+        body: submitData.toString()
       });
+      
       setSuccess(true);
+      
+      // Fire pixel event
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'CompleteRegistration');
+      }
+
     } catch (err) {
-      console.error("Lỗi:", err);
+      console.error("Lỗi gửi form:", err);
+      // Fallback: Vẫn hiện success để user vào nhóm Zalo
       setSuccess(true);
     } finally {
       setLoading(false);
@@ -253,11 +270,18 @@ export default function App() {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     
+    // Tối ưu hóa việc bắt UTM và Referal Code
     const params = new URLSearchParams(window.location.search);
     const utmTags = [];
+    
+    // Standard UTMs
     if (params.get('utm_source')) utmTags.push(`src:${params.get('utm_source')}`);
     if (params.get('utm_medium')) utmTags.push(`med:${params.get('utm_medium')}`);
     if (params.get('utm_campaign')) utmTags.push(`cam:${params.get('utm_campaign')}`);
+    
+    // Bắt thêm Ref Code nếu có
+    if (params.get('ref')) utmTags.push(`ref:${params.get('ref')}`);
+    
     setUtm(utmTags.join(' | ') || "Direct");
 
     return () => window.removeEventListener('scroll', handleScroll);
@@ -482,85 +506,4 @@ export default function App() {
       <section id="valuestack" className="section-padding px-6 bg-white border-t border-apple-gray">
         <div className="max-w-[1000px] mx-auto">
           <div className="bg-[#1D1D1F] rounded-[40px] md:rounded-[60px] text-white p-8 md:p-24 shadow-2xl relative overflow-hidden border border-white/5">
-            <div className="absolute top-0 right-0 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-apple-blue/15 blur-[80px] md:blur-[150px] rounded-full pointer-events-none" />
-            
-            <div className="relative z-10">
-              <div className="text-center mb-12 md:mb-20 space-y-3 md:space-y-4">
-                <Trophy className="mx-auto text-apple-blue mb-4 md:mb-6 w-12 h-12 md:w-16 md:h-16" />
-                <h2 className="text-[34px] md:text-8xl font-black mb-2 md:mb-4 tracking-tighter uppercase whitespace-nowrap">The Stack.</h2>
-                <p className="text-apple-dark-gray text-xs md:text-xl font-bold uppercase tracking-widest px-2">Mọi thứ bạn nhận được trong 3 buổi</p>
-              </div>
-
-              <div className="space-y-3 md:space-y-4">
-                {[...CURRICULUM, ...BONUSES].map((item, i) => (
-                  <div key={i} className="flex items-center justify-between py-4 md:py-6 border-b border-white/5 hover:bg-white/5 px-4 md:px-6 rounded-2xl transition-colors group">
-                    <div className="flex items-center gap-4 md:gap-6 min-w-0">
-                      <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-xl md:rounded-2xl bg-white/5 flex items-center justify-center text-apple-blue group-hover:scale-110 transition-transform">
-                        {'icon' in item ? item.icon : <Gift className="w-5 h-5 md:w-6 md:h-6" />}
-                      </div>
-                      <span className="text-[15px] md:text-2xl font-black tracking-tight uppercase truncate">{item.title}</span>
-                    </div>
-                    <span className="text-apple-dark-gray font-black tracking-tighter text-sm md:text-xl hidden md:block opacity-40">{item.value}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-16 md:mt-24 text-center space-y-12 md:space-y-16">
-                <div className="space-y-2 md:space-y-4">
-                  <p className="text-apple-dark-gray text-[10px] md:text-sm font-black uppercase tracking-[0.3em]">TỔNG GIÁ TRỊ THỰC TẾ</p>
-                  <div className="flex items-center justify-center">
-                    <span className="strikethrough-apple text-[32px] md:text-7xl font-black tracking-tighter whitespace-nowrap">{TOTAL_VALUE}</span>
-                  </div>
-                </div>
-
-                <div className="space-y-3 md:space-y-4 bg-white/5 p-8 md:p-12 rounded-[32px] md:rounded-[40px] border border-white/10 shadow-inner mx-[-5px] md:mx-0">
-                  <p className="text-apple-blue font-black uppercase tracking-[0.3em] text-sm md:text-lg">GIÁ TRỰC TIẾP HÔM NAY</p>
-                  <h3 className="text-[72px] md:text-[180px] font-black leading-none tracking-tighter drop-shadow-2xl whitespace-nowrap">FREE</h3>
-                  <p className="text-apple-dark-gray text-[10px] md:text-base font-bold opacity-60 uppercase tracking-widest">Dành cho 97 người đăng ký đầu tiên</p>
-                </div>
-
-                <div className="pt-6 md:pt-10 space-y-8 md:space-y-10">
-                  <AppleButton 
-                    text={
-                      <span className="flex flex-col md:flex-row items-center justify-center leading-[1.3] md:leading-normal">
-                        <span>Đăng ký giữ chỗ</span>
-                        <span className="hidden md:inline">&nbsp;&&nbsp;</span>
-                        <span className="md:inline">Nhận bộ quà ngay</span>
-                      </span>
-                    } 
-                    fullWidth 
-                    className="py-5 md:py-8 text-[15px] md:text-3xl shadow-blue-500/40 tracking-tighter" 
-                    onClick={() => setModalOpen(true)} 
-                  />
-                  <div className="flex flex-wrap justify-center gap-4 md:gap-10 text-[9px] md:text-[13px] text-apple-dark-gray font-black uppercase tracking-widest opacity-50">
-                    <div className="flex items-center gap-1.5 whitespace-nowrap"><Clock className="w-4 h-4 md:w-[18px] md:h-[18px]" /> 19:30 – 21:00</div>
-                    <div className="flex items-center gap-1.5 whitespace-nowrap"><CalendarDays className="w-4 h-4 md:w-[18px] md:h-[18px]" /> 05/01 – 07/01</div>
-                    <div className="flex items-center gap-1.5 whitespace-nowrap text-apple-blue"><Layers className="w-4 h-4 md:w-[18px] md:h-[18px]" /> 97 Slots Only</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-16 md:py-24 px-6 border-t border-apple-gray bg-apple-gray">
-        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-12 md:gap-16 text-center md:text-left">
-          <div className="space-y-4 md:space-y-6">
-            <img src={LOGO_URL} alt="Logo" className="h-6 md:h-8 grayscale opacity-40 mx-auto md:mx-0 hover:opacity-100 transition-opacity" />
-            <p className="text-apple-dark-gray text-[10px] md:text-sm font-bold leading-relaxed tracking-tight uppercase opacity-60">
-              Copyright &copy; 2025 Click AI Architecture.<br/>
-              Hệ thống AI cho thế hệ Solopreneur.
-            </p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-8 md:gap-12 text-[10px] md:text-[12px] font-black text-apple-dark-gray uppercase tracking-[0.2em] whitespace-nowrap">
-            <a href="#curriculum" onClick={(e) => scrollToSection(e, 'curriculum')} className="hover:text-apple-blue transition-colors">Lộ trình</a>
-            <a href="#speakers" onClick={(e) => scrollToSection(e, 'speakers')} className="hover:text-apple-blue transition-colors">Chuyên gia</a>
-            <a href="#valuestack" onClick={(e) => scrollToSection(e, 'valuestack')} className="hover:text-apple-blue transition-colors">Ưu đãi</a>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
+            <div className="absolute top-0 right-0 w-[300px] md:w-[600px] h-[300px] md:h ... (truncated)
