@@ -126,7 +126,7 @@ const AppleButton = ({ text, onClick, variant = 'primary', className = '', fullW
     >
       {loading ? <Loader2 className="animate-spin" size={20} /> : (
         <>
-          <span className="md:whitespace-nowrap">{text}</span>
+          <span className="text-center">{text}</span>
           {icon || <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform shrink-0" />}
         </>
       )}
@@ -322,7 +322,7 @@ export default function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.8 }}
-            className="text-[26px] sm:text-[40px] md:text-[96px] font-black tracking-tighter text-apple-black leading-[1.2] md:leading-[0.95]"
+            className="text-[22px] sm:text-[40px] md:text-[96px] font-black tracking-tighter text-apple-black leading-[1.3] md:leading-[0.95]"
           >
             ĐỪNG CHỈ DÙNG AI.<br/>
             <span className="text-apple-dark-gray/30">HÃY XÂY HỆ THỐNG.</span>
@@ -525,7 +525,7 @@ export default function App() {
                       <span className="flex flex-col md:flex-row items-center justify-center leading-[1.3] md:leading-normal">
                         <span>Đăng ký giữ chỗ</span>
                         <span className="hidden md:inline">&nbsp;&&nbsp;</span>
-                        <span>Nhận bộ quà ngay</span>
+                        <span className="md:inline">Nhận bộ quà ngay</span>
                       </span>
                     } 
                     fullWidth 
