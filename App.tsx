@@ -27,7 +27,7 @@ import {
 // --- CONFIGURATION ---
 const LOGO_URL = "https://static.vncdn.vn/vnetwork.vn/pub/websites/uploads/5/new%20logo%20click%20ai%20(1).png";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2CEnH-BEpj4GeEz0Kwi2Qu3m1Xmk74Ix6VCJEaPej2L0LwE6wdqdeturLrn3IpIFvjA/exec";
-const ZALO_GROUP_URL = "https://zalo.me/g/axaqfu195";
+const ZALO_GROUP_URL = "https://zalo.me/g/ffdmnl889";
 
 const CURRICULUM = [
   {
@@ -166,11 +166,25 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
     setLoading(true);
     
     // 3. CHUẨN BỊ DỮ LIỆU GỬI ĐI (Mapping với Google Sheet)
+    
+    // XỬ LÝ SỐ ĐIỆN THOẠI & EMAIL
+    
+    // Email: Xóa toàn bộ khoảng trắng, chuyển thường.
+    const cleanEmail = rawEmail.replace(/\s/g, '').toLowerCase();
+
+    // Phone: Loại bỏ tất cả ký tự không phải số.
+    let cleanPhone = rawPhone.replace(/\D/g, ''); 
+    // Loại bỏ số 0 ở đầu để Google Sheet hiểu đây là NUMBER, không thêm dấu '
+    // Ví dụ: 090123 -> 90123
+    if (cleanPhone.startsWith('0')) {
+        cleanPhone = cleanPhone.substring(1);
+    }
+    
     // Dùng URLSearchParams (x-www-form-urlencoded) để tương thích chuẩn nhất với Google Script
     const submitData = new URLSearchParams();
     submitData.append('name', rawName.trim());  // Cột A
-    submitData.append('email', rawEmail.trim().toLowerCase()); // Cột B
-    submitData.append('phone', rawPhone.trim()); // Cột C
+    submitData.append('email', cleanEmail); // Cột B (đã làm sạch)
+    submitData.append('phone', cleanPhone); // Cột C (đã làm sạch)
     submitData.append('utm', utm || "Direct");   // Cột D (Ref Code)
     
     // LƯU Ý QUAN TRỌNG: 
@@ -414,7 +428,7 @@ export default function App() {
               <AppleButton text="Giữ chỗ miễn phí ngay" className="w-full md:w-auto px-8 md:px-16 py-5 md:py-6 text-lg md:text-2xl shadow-2xl tracking-tighter" onClick={() => setModalOpen(true)} />
               <div className="flex flex-wrap justify-center gap-x-6 md:gap-x-8 gap-y-3 text-apple-dark-gray text-[11px] md:text-base font-bold uppercase tracking-widest">
                 <span className="flex items-center gap-1.5 whitespace-nowrap"><Clock className="text-apple-blue w-4 h-4 md:w-[18px] md:h-[18px]" /> 19:30 – 21:00</span>
-                <span className="flex items-center gap-1.5 whitespace-nowrap"><CalendarDays className="text-apple-blue w-4 h-4 md:w-[18px] md:h-[18px]" /> 05/01 – 07/01</span>
+                <span className="flex items-center gap-1.5 whitespace-nowrap"><CalendarDays className="text-apple-blue w-4 h-4 md:w-[18px] md:h-[18px]" /> 02/03 – 04/03</span>
                 <span className="flex items-center gap-1.5 whitespace-nowrap"><Users className="text-apple-blue w-4 h-4 md:w-[18px] md:h-[18px]" /> Nền tảng Zoom</span>
               </div>
             </div>
@@ -555,4 +569,79 @@ export default function App() {
       <section id="valuestack" className="section-padding px-6 bg-white border-t border-apple-gray">
         <div className="max-w-[1000px] mx-auto">
           <div className="bg-[#1D1D1F] rounded-[40px] md:rounded-[60px] text-white p-8 md:p-24 shadow-2xl relative overflow-hidden border border-white/5">
-            <div className="absolute top-0 right-0 w-[300px] md:w-[600px] h-[300px] md:h ... (truncated)
+            <div className="absolute top-0 right-0 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-apple-blue/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
+            
+            <div className="relative z-10 text-center space-y-8 md:space-y-12">
+              <div className="space-y-4">
+                <h2 className="text-3xl md:text-6xl font-black uppercase tracking-tighter">Ưu đãi đặc biệt</h2>
+                <p className="text-white/70 text-lg md:text-xl font-medium">Tổng giá trị quà tặng bạn sẽ nhận được</p>
+              </div>
+
+              <div className="grid gap-4 md:gap-6 text-left max-w-3xl mx-auto">
+                {CURRICULUM.map((item, idx) => (
+                  <div key={`c-${idx}`} className="flex items-center justify-between p-4 md:p-6 rounded-2xl md:rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center text-white">
+                        {item.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-sm md:text-lg">{item.title}</h3>
+                        <p className="text-xs md:text-sm text-white/50">Module {item.day}</p>
+                      </div>
+                    </div>
+                    <span className="font-bold text-white/90 text-sm md:text-lg">{item.value}</span>
+                  </div>
+                ))}
+                
+                {BONUSES.map((item, idx) => (
+                  <div key={`b-${idx}`} className="flex items-center justify-between p-4 md:p-6 rounded-2xl md:rounded-3xl bg-apple-blue/20 border border-apple-blue/30 backdrop-blur-sm">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-apple-blue flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                        {item.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-sm md:text-lg">{item.title}</h3>
+                        <p className="text-xs md:text-sm text-apple-blue font-bold uppercase tracking-widest">Bonus Gift</p>
+                      </div>
+                    </div>
+                    <span className="font-bold text-white/90 text-sm md:text-lg">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-8 border-t border-white/10 space-y-8">
+                <div className="flex flex-col items-center gap-2">
+                  <p className="text-white/50 text-sm md:text-lg font-bold uppercase tracking-widest">Tổng giá trị thực tế</p>
+                  <div className="text-4xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 tracking-tighter decoration-white/30 decoration-4 relative inline-block">
+                     <span className="strikethrough-apple text-white/40">{TOTAL_VALUE}</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-6">
+                   <div className="inline-block bg-white text-black text-xl md:text-2xl font-black px-8 py-3 rounded-full uppercase tracking-widest transform -rotate-2 shadow-xl">
+                      Miễn phí 100%
+                   </div>
+                   <p className="text-white/70 text-sm md:text-base font-medium max-w-xl mx-auto">
+                     Dành riêng cho 97 thành viên đăng ký sớm nhất trong hôm nay.
+                   </p>
+                </div>
+
+                <div className="flex justify-center pb-8">
+                   <AppleButton text="Đăng ký giữ chỗ ngay" variant="primary" className="text-lg md:text-xl px-10 md:px-16 py-5 md:py-6" onClick={() => setModalOpen(true)} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="py-12 md:py-16 text-center text-apple-dark-gray text-xs md:text-sm font-medium border-t border-apple-gray mt-12 bg-white">
+        <p className="mb-4">&copy; 2025 Click AI Architecture. All rights reserved.</p>
+        <div className="flex justify-center gap-6 opacity-60">
+           <span>Privacy Policy</span>
+           <span>Terms of Service</span>
+        </div>
+      </footer>
+    </div>
+  );
+}
