@@ -179,18 +179,31 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
     if (cleanPhone.startsWith('0')) {
         cleanPhone = cleanPhone.substring(1);
     }
+
+    // Lấy thời gian hiện tại
+    const timestamp = new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
     
     // Dùng URLSearchParams (x-www-form-urlencoded) để tương thích chuẩn nhất với Google Script
     const submitData = new URLSearchParams();
-    submitData.append('name', rawName.trim());  // Cột A
-    submitData.append('email', cleanEmail); // Cột B (đã làm sạch)
-    submitData.append('phone', cleanPhone); // Cột C (đã làm sạch)
-    submitData.append('utm', utm || "Direct");   // Cột D (Ref Code)
-    
-    // LƯU Ý QUAN TRỌNG: 
-    // KHÔNG gửi 'time' từ Client nữa. Việc gửi time từ Client đã gây ra lỗi lệch cột (Time nhảy vào cột A).
-    // Google Script sẽ tự động điền thời gian vào cột cuối cùng (Cột E) như các dòng dữ liệu cũ đã đúng.
 
+    // -------------------------------------------------------------------------
+    // QUAN TRỌNG: HACK MAPPING DỮ LIỆU
+    // Dựa trên kết quả thực tế, Google Script đang map các tham số vào cột như sau:
+    // Param 'time'  -> Cột A
+    // Param 'email' -> Cột B
+    // Param 'name'  -> Cột C
+    // Param 'phone' -> Cột D
+    // Param 'utm'   -> Cột E
+    // 
+    // Vì vậy ta cần gửi giá trị chéo để khớp với Header của Sheet (A=Tên, B=Email, C=SĐT, D=Ref, E=Time)
+    // -------------------------------------------------------------------------
+    
+    submitData.append('time', rawName.trim());     // Gửi Tên vào param 'time' để vào Cột A
+    submitData.append('email', cleanEmail);        // Gửi Email vào param 'email' để vào Cột B (Đúng)
+    submitData.append('name', cleanPhone);         // Gửi SĐT vào param 'name' để vào Cột C
+    submitData.append('phone', utm || "Direct");   // Gửi RefCode vào param 'phone' để vào Cột D
+    submitData.append('utm', timestamp);           // Gửi Thời gian vào param 'utm' để vào Cột E
+    
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
