@@ -441,7 +441,7 @@ export default function App() {
               <AppleButton text="Giữ chỗ miễn phí ngay" className="w-full md:w-auto px-8 md:px-16 py-5 md:py-6 text-lg md:text-2xl shadow-2xl tracking-tighter" onClick={() => setModalOpen(true)} />
               <div className="flex flex-wrap justify-center gap-x-6 md:gap-x-8 gap-y-3 text-apple-dark-gray text-[11px] md:text-base font-bold uppercase tracking-widest">
                 <span className="flex items-center gap-1.5 whitespace-nowrap"><Clock className="text-apple-blue w-4 h-4 md:w-[18px] md:h-[18px]" /> 19:30 – 21:00</span>
-                <span className="flex items-center gap-1.5 whitespace-nowrap"><CalendarDays className="text-apple-blue w-4 h-4 md:w-[18px] md:h-[18px]" /> 02/03 – 04/03</span>
+                <span className="flex items-center gap-1.5 whitespace-nowrap"><CalendarDays className="text-apple-blue w-4 h-4 md:w-[18px] md:h-[18px]" /> 24/03 – 26/03</span>
                 <span className="flex items-center gap-1.5 whitespace-nowrap"><Users className="text-apple-blue w-4 h-4 md:w-[18px] md:h-[18px]" /> Nền tảng Zoom</span>
               </div>
             </div>
