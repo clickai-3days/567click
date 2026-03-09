@@ -26,7 +26,7 @@ import {
 
 // --- CONFIGURATION ---
 const LOGO_URL = "https://static.vncdn.vn/vnetwork.vn/pub/websites/uploads/5/new%20logo%20click%20ai%20(1).png";
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2CEnH-BEpj4GeEz0Kwi2Qu3m1Xmk74Ix6VCJEaPej2L0LwE6wdqdeturLrn3IpIFvjA/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytibCwYTZzrBL0Qy3Rjx7UFwQFGWzzLA_r7GBddKrGmg18zJW9r3e_MP7WfHFDRDpkEg/exec";
 const ZALO_GROUP_URL = "https://zalo.me/g/osgxxe815";
 
 const CURRICULUM = [
@@ -187,22 +187,19 @@ const RegistrationModal = ({ isOpen, onClose, utm }: { isOpen: boolean; onClose:
     const submitData = new URLSearchParams();
 
     // -------------------------------------------------------------------------
-    // QUAN TRỌNG: HACK MAPPING DỮ LIỆU
-    // Dựa trên kết quả thực tế, Google Script đang map các tham số vào cột như sau:
-    // Param 'time'  -> Cột A
-    // Param 'email' -> Cột B
-    // Param 'name'  -> Cột C
-    // Param 'phone' -> Cột D
-    // Param 'utm'   -> Cột E
-    // 
-    // Vì vậy ta cần gửi giá trị chéo để khớp với Header của Sheet (A=Tên, B=Email, C=SĐT, D=Ref, E=Time)
+    // MAPPING DỮ LIỆU
+    // Cột A: Time
+    // Cột B: Họ Tên
+    // Cột C: Email
+    // Cột D: SĐT
+    // Cột E: Ref Code
     // -------------------------------------------------------------------------
     
-    submitData.append('time', rawName.trim());     // Gửi Tên vào param 'time' để vào Cột A
-    submitData.append('email', cleanEmail);        // Gửi Email vào param 'email' để vào Cột B (Đúng)
-    submitData.append('name', cleanPhone);         // Gửi SĐT vào param 'name' để vào Cột C
-    submitData.append('phone', utm || "Direct");   // Gửi RefCode vào param 'phone' để vào Cột D
-    submitData.append('utm', timestamp);           // Gửi Thời gian vào param 'utm' để vào Cột E
+    submitData.append('time', timestamp);
+    submitData.append('name', rawName.trim());
+    submitData.append('email', cleanEmail);
+    submitData.append('phone', cleanPhone);
+    submitData.append('utm', utm || "Direct");
     
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
